@@ -16,7 +16,7 @@ clc
 % where D and K are matrices and qe is the eigenaxis component of the
 % quaternion
 
-syms J11 J22 J33 J12 J13 J23 J11e J22e J33e J12e J13e J23e mu D1 D2 D3 K1 K2 K3 w1 w2 w3 q1 q2 q3 real;
+syms J11 J22 J33 J12 J13 J23 J11e J22e J33e J12e J13e J23e mu D1 D2 D3 K1 K2 K3 w1 w2 w3 q1 q2 q3 q4 q1c q2c q3c q4c real;
 
 
 J = [J11 J12 J13
@@ -39,9 +39,13 @@ w = [w1
      w2
      w3];
 
-qe = [q1
-      q2
-      q3];
+Q = [ q4c   q3c  -q2c  -q1c
+     -q3c   q4c   q1c  -q2c
+      q2c  -q1c   q4c  -q3c
+      q1c   q2c   q3c   q4c ];
+
+qe = Q * [q1 ; q2 ; q3 ; q4];
+qe = qe(1:3);
 
 u = mu*cross(w, Je*w) - D*w - K*qe;
 

@@ -25,6 +25,9 @@ function inputData = BongWieCtrlLawDemo()
     inputData.ctrl.mu = 0.9;
     inputData.ctrl.type = 'BWCONT';
 
+    inputData.ctrl.qc = [0 ; 0 ; 0 ; 1];
+    inputData.ctrl.qc = inputData.ctrl.qc ./ norm(inputData.ctrl.qc);
+
 
     % Spacecraft plant model parameters
     inputData.spacecraft.J = [1200   100  -200

@@ -14,11 +14,11 @@ function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl)
         % Compute control input at the i+1 step
         % u = w X (Je w) - D*w - K*qe
         w = xOut(end,11:13).';
-        qe = xOut(end,7:9).';
+        qe = errorQuaternion(ctrl.qc, xOut(end,7:10).');
         D = ctrl.D;
         K = ctrl.K;
         Je = ctrl.Jest;
-        u = cross(w, Je*w) - D*w - K*qe;
+        u = cross(w, Je*w) - D*w - K*qe(1:3);
 
     elseif strcmp(ctrl.type, 'NONE')
 

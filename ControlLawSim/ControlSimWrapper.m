@@ -2,9 +2,9 @@ clear
 close all
 clc
 
-addpath('.\Dynamics')
-addpath('.\Functions')
-addpath('.\InputFiles')
+addpath(genpath('.\Dynamics'))
+addpath(genpath('.\Functions'))
+addpath(genpath('.\InputFiles'))
 
 
 
