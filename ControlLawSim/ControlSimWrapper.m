@@ -10,7 +10,7 @@ addpath(genpath('.\InputFiles'))
 
 %% LOAD INPUT FILE
 
-inputData = BongWieCtrlLawDemo();
+inputData = BongWieDiscrete();
 
 
 
@@ -31,4 +31,4 @@ figure
 plot(data.t, data.w);
 
 figure
-plot(data.t,data.u);
+plot(data.t, data.u);

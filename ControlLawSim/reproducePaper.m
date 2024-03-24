@@ -89,6 +89,11 @@ tiledlayout(2, 2, 'TileSpacing', 'compact', 'Padding', 'compact');
 
 lineStyles = {'-.', ':', '--', '-'};
 
+ylimits = [-0.2 0.6
+           -0.4 0.6
+           -0.2 0.8
+            0.0 1.0];
+
 for idx = 1:4
 
     nexttile;
@@ -101,6 +106,9 @@ for idx = 1:4
 
     xlabel('Time (sec)')
     ylabel(['q', num2str(idx)])
+    xlim([0 100])
+    xticks(0:50:100);
+    ylim(ylimits(idx,:))
 
     legend('Case 1', 'Case 2', 'Case 3', 'Case 4', 'Location', 'Best')
 
@@ -119,6 +127,14 @@ tiledlayout(2, 2, 'TileSpacing', 'compact', 'Padding', 'compact');
 
 lineStyles = {'-.', ':', '--', '-'};
 
+ylimits = [-0.3  0.1
+           -0.1  0.05
+           -0.15 0.05];
+
+yt = {-0.3  : 0.1  : 0.1
+      -0.1  : 0.05 : 0.05
+      -0.15 : 0.05 : 0.05};
+
 for idx = 1:3
 
     nexttile;
@@ -131,6 +147,10 @@ for idx = 1:3
 
     xlabel('Time (sec)')
     ylabel(['\omega', num2str(idx)])
+    xlim([0 100])
+    xticks(0:50:100);
+    ylim(ylimits(idx,:));
+    yticks(yt{idx});
 
     legend('Case 1', 'Case 2', 'Case 3', 'Case 4', 'Location', 'Best')
 
@@ -150,6 +170,10 @@ tiledlayout(2, 2, 'TileSpacing', 'compact', 'Padding', 'compact');
 
 lineStyles = {'-.', ':', '--', '-'};
 
+ylimits = [-150  50
+           -100  50
+           -150  50];
+
 for idx = 1:3
 
     nexttile;
@@ -162,6 +186,9 @@ for idx = 1:3
 
     xlabel('Time (sec)')
     ylabel(['u', num2str(idx)])
+    xlim([0 100])
+    xticks(0:50:100);
+    ylim(ylimits(idx,:));
 
     legend('Case 1', 'Case 2', 'Case 3', 'Case 4', 'Location', 'Best')
 

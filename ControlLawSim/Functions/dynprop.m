@@ -1,4 +1,4 @@
-function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl)
+function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame)
     
     % Set up initial state vector
     x0 = [r ; v ; q ; w];
@@ -18,12 +18,39 @@ function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl)
         D = ctrl.D;
         K = ctrl.K;
         Je = ctrl.Jest;
-        u = cross(w, Je*w) - D*w - K*qe(1:3);
+        u = ctrl.mu * cross(w, Je*w) - D*w - K*qe(1:3);
+
+    elseif strcmp(ctrl.type, 'BWDISC')
+
+        if mod(simFrame, ctrl.nZOH) == 0
+
+            % Compute the control input at this time step.  This control input
+            % is applied throughout the entire propagation to the next time
+            % step, to simulate a digital controller using a zero-order hold
+            w = x0(11:13);
+            qe = errorQuaternion(ctrl.qc, x0(7:10));
+            D = ctrl.D;
+            K = ctrl.K;
+            Je = ctrl.Jest;
+            u = ctrl.mu * cross(w, Je*w) - D*w - K*qe(1:3);
+
+        else
+
+            % Otherwise, use the previous control input
+            u = ctrl.uPrev;
+
+        end
+
+        [tOut, xOut] = ode45(@(t,x) bongWieDisc(t,x,SC,u), [0 simIn.dt], x0, S);
 
     elseif strcmp(ctrl.type, 'NONE')
 
         [tOut, xOut] = ode45(@(t,x) noCtrl(t,x,SC), [0 simIn.dt], x0, S);
         u = zeros(3,1);
+
+    else
+
+        error('Error: Unspecified control algorithm');
 
     end
 

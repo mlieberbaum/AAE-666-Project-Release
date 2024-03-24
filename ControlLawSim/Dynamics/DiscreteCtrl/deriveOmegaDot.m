@@ -12,16 +12,36 @@ clc
 % torque input.  Here, the torque input is assumed constant throughout the
 % propagation step, simulating a discrete controller
 
-syms J11 J22 J33 J12 J13 J23 w1 w2 w3 u1 u2 u3 real;
+syms J11 J22 J33 J12 J13 J23 J11e J22e J33e J12e J13e J23e D1 D2 D3 K1 K2 K3 w1 w2 w3 q1 q2 q3 q4 q1c q2c q3c q4c u1 u2 u3 real;
 
 
 J = [J11 J12 J13
      J12 J22 J23
      J13 J23 J33];
 
+Je = [J11e J12e J13e
+      J12e J22e J23e
+      J13e J23e J33e];
+
+D = [D1   0   0
+      0  D2   0
+      0   0  D3];
+
+K = [K1   0   0
+      0  K2   0
+      0   0  K3];
+
 w = [w1
      w2
      w3];
+
+Q = [ q4c   q3c  -q2c  -q1c
+     -q3c   q4c   q1c  -q2c
+      q2c  -q1c   q4c  -q3c
+      q1c   q2c   q3c   q4c ];
+
+qe = Q * [q1 ; q2 ; q3 ; q4];
+qe = qe(1:3);
 
 u = [u1
      u2

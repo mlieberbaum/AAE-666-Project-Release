@@ -27,6 +27,9 @@ function data = ControlLawSim(inputData)
 
 
     %% MAIN SIMULATION LOOP
+
+    simFrame = 0;
+
     for idx = 1 : npts-1
 
         % Get state
@@ -36,7 +39,7 @@ function data = ControlLawSim(inputData)
         w = data.w(idx,:).';
 
         % Propagate state
-        [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl);
+        [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame);
 
         % Set to output array
         data.r(idx+1,:) = rOut.';
@@ -44,6 +47,12 @@ function data = ControlLawSim(inputData)
         data.q(idx+1,:) = qOut.';
         data.w(idx+1,:) = wOut.';
         data.u(idx+1,:) = uOut.';
+
+        % Set control input to ctrl structure (used for zero order hold)
+        ctrl.uPrev = uOut.';
+
+        % Increment sim frame
+        simFrame = simFrame + 1;
 
     end
 
