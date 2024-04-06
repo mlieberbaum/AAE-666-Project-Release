@@ -9,11 +9,11 @@
 % 
 % The simulation input conditions, per the journal article, are:
 % 
-% Spacecraft Inertia Matrix (kg m^2):
+% Spacecraft Inertia Matrix, with 10% error (kg m^2):
 % 
 %   J = [1200   100  -200
 %         100  2200   300
-%        -200   300  3100]
+%        -200   300  3100] * 0.9
 % 
 % Initial quaternion (note: this was normalized to ensure magnitude 1):
 %
@@ -29,9 +29,9 @@
 %
 % Estimated inertia (10% error, zero diagonal elements assumed):
 %
-%   Jest = [1080     0     0
-%              0  1980     0
-%              0     0  2790]
+%   Jest = [1200     0     0
+%              0  2200     0
+%              0     0  3100]
 %
 % Control gain matrix D:
 %
