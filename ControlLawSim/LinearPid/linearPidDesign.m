@@ -47,7 +47,7 @@ tl = tiledlayout(1, 1, 'Padding', 'Compact', 'TileSpacing', 'Compact');
 nexttile;
 hold on;
 grid on;
-[y1, t1] = step(Gcl, 90);
+[y1, t1] = step(Gcl, 0:0.01:90);
 plot(t1, y1);
 
 figure;
@@ -86,7 +86,7 @@ margin(Gol);
 legend('PID Controller')
 
 figure(fh);
-[y2, t2] = step(Gcl, 90);
+[y2, t2] = step(Gcl, 0:0.01:90);
 plot(t2, y2);
 
 
