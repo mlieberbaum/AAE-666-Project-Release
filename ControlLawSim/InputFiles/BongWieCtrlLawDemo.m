@@ -21,7 +21,7 @@ function inputData = BongWieCtrlLawDemo()
     inputData.ctrl.K = diag([60,110,155]);
     inputData.ctrl.D = 0.316 .* diag([1200, 2200, 3100]);
     
-    inputData.ctrl.Jest = 0.9 * diag([1200, 2200, 3100]);
+    inputData.ctrl.Jest = diag([1200, 2200, 3100]);
     inputData.ctrl.mu = 0.9;
     inputData.ctrl.type = 'BWCONT';
 
@@ -32,6 +32,6 @@ function inputData = BongWieCtrlLawDemo()
     % Spacecraft plant model parameters
     inputData.spacecraft.J = [1200   100  -200
                                100  2200   300
-                              -200   300  3100];
+                              -200   300  3100] * 0.9;
     
 end
