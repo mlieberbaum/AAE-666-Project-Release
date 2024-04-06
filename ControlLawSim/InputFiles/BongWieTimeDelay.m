@@ -2,9 +2,6 @@ function inputData = BongWieTimeDelay()
     
     
     % Simulation parameters
-    inputData.sim.simAttitude = true;
-    inputData.sim.simEphem = false;
-    inputData.sim.simGGTorq = false;
     inputData.sim.tf = 1000;
     inputData.sim.dt = 0.01;
 

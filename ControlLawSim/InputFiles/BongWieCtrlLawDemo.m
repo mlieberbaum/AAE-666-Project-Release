@@ -2,9 +2,6 @@ function inputData = BongWieCtrlLawDemo()
     
     
     % Simulation parameters
-    inputData.sim.simAttitude = true;
-    inputData.sim.simEphem = false;
-    inputData.sim.simGGTorq = false;
     inputData.sim.tf = 100;
     inputData.sim.dt = 0.01;
 
