@@ -17,6 +17,7 @@ function data = ControlLawSim(inputData)
     data.q = nan(npts, 4);
     data.w = nan(npts, 3);
     data.u = nan(npts, 3);
+    data.ua = nan(npts, 3);
 
     % Set initial conditions to output arrays
     data.r(1,:) = x0.r.';
@@ -39,7 +40,7 @@ function data = ControlLawSim(inputData)
         w = data.w(idx,:).';
 
         % Propagate state
-        [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame);
+        [rOut, vOut, qOut, wOut, uOut, uActOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame, data.u);
 
         % Set to output array
         data.r(idx+1,:) = rOut.';
@@ -47,6 +48,7 @@ function data = ControlLawSim(inputData)
         data.q(idx+1,:) = qOut.';
         data.w(idx+1,:) = wOut.';
         data.u(idx+1,:) = uOut.';
+        data.ua(idx+1,:) = uActOut.';
 
         % Set control input to ctrl structure (used for zero order hold)
         ctrl.uPrev = uOut.';

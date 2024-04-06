@@ -1,4 +1,4 @@
-function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame)
+function [rOut, vOut, qOut, wOut, uOut, uActOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame, uHist)
     
     % Set up initial state vector
     x0 = [r ; v ; q ; w];
@@ -18,7 +18,8 @@ function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl, s
         D = ctrl.D;
         K = ctrl.K;
         Je = ctrl.Jest;
-        u = ctrl.mu * cross(w, Je*w) - D*w - K*qe(1:3);
+        uCtl = ctrl.mu * cross(w, Je*w) - D*w - K*qe(1:3);
+        uAct = uCtl;
 
     elseif strcmp(ctrl.type, 'BWDISC')
 
@@ -32,21 +33,34 @@ function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl, s
             D = ctrl.D;
             K = ctrl.K;
             Je = ctrl.Jest;
-            u = ctrl.mu * cross(w, Je*w) - D*w - K*qe(1:3);
+            uCtl = ctrl.mu * cross(w, Je*w) - D*w - K*qe(1:3);
+
+            % Implement time delay in control system
+            if isfield(ctrl, 'delay') && ctrl.delay > 0
+                if simFrame <= ctrl.delay
+                    uAct = [0;0;0];
+                else
+                    uAct = uHist(simFrame - ctrl.delay, :).';
+                end
+            else
+                uAct = uCtl;
+            end
 
         else
 
             % Otherwise, use the previous control input
-            u = ctrl.uPrev;
+            uCtl = ctrl.uPrev;
+            uAct = uCtl;
 
         end
 
-        [tOut, xOut] = ode45(@(t,x) bongWieDisc(t,x,SC,u), [0 simIn.dt], x0, S);
+        [tOut, xOut] = ode45(@(t,x) bongWieDisc(t,x,SC,uAct), [0 simIn.dt], x0, S);
 
     elseif strcmp(ctrl.type, 'NONE')
 
         [tOut, xOut] = ode45(@(t,x) noCtrl(t,x,SC), [0 simIn.dt], x0, S);
-        u = zeros(3,1);
+        uCtl = zeros(3,1);
+        uAct = uCtl;
 
     else
 
@@ -65,6 +79,7 @@ function [rOut, vOut, qOut, wOut, uOut] = dynprop(r, v, q, w, simIn, SC, ctrl, s
     vOut = xOut(4:6).';
     qOut = xOut(7:10).';
     wOut = xOut(11:13).';
-    uOut = u;
+    uOut = uCtl;
+    uActOut = uAct;
 
 end
