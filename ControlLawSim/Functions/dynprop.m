@@ -1,4 +1,4 @@
-function [rOut, vOut, qOut, wOut, uOut, uActOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame, uHist)
+function [rOut, vOut, qOut, wOut, uOut, uActOut, ctrl] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame, uHist)
     
     % Set up initial state vector
     x0 = [r ; v ; q ; w];
@@ -54,6 +54,36 @@ function [rOut, vOut, qOut, wOut, uOut, uActOut] = dynprop(r, v, q, w, simIn, SC
 
         end
 
+        [tOut, xOut] = ode45(@(t,x) bongWieDisc(t,x,SC,uAct), [0 simIn.dt], x0, S);
+
+    elseif strcmp(ctrl.type, 'LINEAR')
+
+        % Compute the control input at this time step.  This control input
+        % is applied throughout the entire propagation to the next time
+        % step, to simulate a digital controller using a zero-order hold.
+        % Use the small angle approximation to obtain the angle error.
+        qErr = -errorQuaternion(ctrl.qc, x0(7:10));
+        thErr = qErr(1:3) * 2;
+
+        uP = ctrl.Kp * thErr;
+
+        if simFrame == 0
+            ctrl.thErrInt = thErr * simIn.dt;
+            ctrl.thErrPrev = thErr;
+            uD = zeros(3,1);
+            uI = zeros(3,1);
+        else
+            uD = ctrl.Kd * (thErr - ctrl.thErrPrev) / simIn.dt;
+            ctrl.thErrPrev = thErr;
+            uI = ctrl.Ki * ctrl.thErrInt;
+            ctrl.thErrInt = ctrl.thErrInt + thErr * simIn.dt;
+        end
+
+        uCtl = uP + uD + uI;
+        uAct = uCtl;
+
+        % Bong Wie Disc assumes a pre-calculated control input, so it is
+        % valid to call for the linear controller simulation
         [tOut, xOut] = ode45(@(t,x) bongWieDisc(t,x,SC,uAct), [0 simIn.dt], x0, S);
 
     elseif strcmp(ctrl.type, 'NONE')

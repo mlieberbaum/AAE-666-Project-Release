@@ -40,7 +40,7 @@ function data = ControlLawSim(inputData)
         w = data.w(idx,:).';
 
         % Propagate state
-        [rOut, vOut, qOut, wOut, uOut, uActOut] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame, data.u);
+        [rOut, vOut, qOut, wOut, uOut, uActOut, ctrl] = dynprop(r, v, q, w, simIn, SC, ctrl, simFrame, data.u);
 
         % Set to output array
         data.r(idx+1,:) = rOut.';

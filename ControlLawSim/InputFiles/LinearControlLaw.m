@@ -1,4 +1,4 @@
-function inputData = BongWieDiscrete()
+function inputData = LinearControlLaw(type)
     
     
     % Simulation parameters
@@ -14,19 +14,23 @@ function inputData = BongWieDiscrete()
     inputData.x0.q = inputData.x0.q ./ norm(inputData.x0.q);
 
 
-    % Controller parameters (Section IV Case 4)
-    inputData.ctrl.K = diag([60,110,155]);
-    inputData.ctrl.D = 0.316 .* diag([1200, 2200, 3100]);
+    % Controller parameters
+    if strcmp(type, 'PD')
+        inputData.ctrl.Kp = 30.0;
+        inputData.ctrl.Kd = 379.2;
+        inputData.ctrl.Ki = 0.0;
+    elseif strcmp(type, 'PID')
+        inputData.ctrl.Kp = 89.91;
+        inputData.ctrl.Kd = 568.8;
+        inputData.ctrl.Ki = 4.74;
+    else
+        error('Invalid control type');
+    end
     
-    inputData.ctrl.Jest = diag([1200, 2200, 3100]);
-    inputData.ctrl.mu = 0.9;
-    inputData.ctrl.type = 'BWDISC';
+    inputData.ctrl.type = 'LINEAR';
 
     inputData.ctrl.qc = [0 ; 0 ; 0 ; 1];
     inputData.ctrl.qc = inputData.ctrl.qc ./ norm(inputData.ctrl.qc);
-
-    inputData.ctrl.nZOH = 1;  % Number of time steps to do the ZOH.  
-                              % Must be >= 1 (do NOT set to 0)
 
 
     % Spacecraft plant model parameters

@@ -43,16 +43,6 @@
 %
 %   mu = 0.9
 % 
-% For the linear PD controller:
-%
-%   Kp = 30.0
-%   Kd = 379.2
-%
-% For the linear PID controller:
-%
-%   Kp = 89.91
-%   Kd = 568.8
-%   Ki = 4.74
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -70,26 +60,28 @@ addpath(genpath('.\InputFiles'))
 
 %% RUN THE SIMULATIONS
 
-% PD Controller
-inputData = LinearControlLaw('PD');
+% Case 1: Continuous
+inputData = BongWieCtrlLawDemo();
 data{1} = ControlLawSim(inputData);
 
-% PID Controller
-inputData = LinearControlLaw('PID');
+% Initialize digital controller simulation input
+inputData = BongWieDiscrete();
+
+% Case 2: 1 second ZOH
+inputData.ctrl.nZOH = 100;
 data{2} = ControlLawSim(inputData);
 
-% Bong Wie control law, state feed back only
-inputData = BongWieDiscrete();
-inputData.ctrl.K = diag([110 110 110]);
-inputData.ctrl.mu = 0.0;
-inputData.ctrl.nZOH = 1;
+% Case 3: 2 second ZOH
+inputData.ctrl.nZOH = 200;
 data{3} = ControlLawSim(inputData);
 
-% Nonlinear control law
-inputData = BongWieDiscrete();
-inputData.ctrl.K = diag([110 110 110]);
-inputData.ctrl.nZOH = 1;
+% Case 4: 3 second ZOH
+inputData.ctrl.nZOH = 300;
 data{4} = ControlLawSim(inputData);
+
+% Case 5: 4 second ZOH
+inputData.ctrl.nZOH = 400;
+data{5} = ControlLawSim(inputData);
 
 
 
@@ -105,13 +97,16 @@ for idx = 1:4
     hold on
     grid on
 
-    for idx2 = 1:4
+    for idx2 = 1:numel(data)
         plot(data{idx2}.t, data{idx2}.q(:,idx));
     end
 
     xlabel('Time (sec)')
     ylabel(['q', num2str(idx)])
-    legend('PD', 'PID', 'State Feedback', 'Nonlinear', 'Location', 'Best')
+    
+    if idx == 4
+        legend('Continuous', '1 Hz ZOH', '0.5 Hz ZOH', '0.33 Hz ZOH', '0.25 Hz ZOH', 'Location', 'Best')
+    end
 
 end
 
@@ -132,13 +127,17 @@ for idx = 1:3
     hold on
     grid on
 
-    for idx2 = 1:4
+    for idx2 = 1:numel(data)
         plot(data{idx2}.t, data{idx2}.w(:,idx));
     end
 
     xlabel('Time (sec)')
     ylabel(['\omega', num2str(idx)])
-    legend('PD', 'PID', 'State Feedback', 'Nonlinear', 'Location', 'Best')
+
+    if idx == 3
+        lh = legend('Continuous', '1 Hz ZOH', '0.5 Hz ZOH', '0.33 Hz ZOH', '0.25 Hz ZOH', 'Location', 'Best');
+        set(lh, 'Position', [0.6409 0.1913 0.1621 0.1497])
+    end
 
 end
 
