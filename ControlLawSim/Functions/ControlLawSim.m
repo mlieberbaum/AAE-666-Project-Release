@@ -56,6 +56,11 @@ function data = ControlLawSim(inputData)
         % Increment sim frame
         simFrame = simFrame + 1;
 
+        % Status
+        if idx > 1 && mod(data.t(idx), 1) < mod(data.t(idx-1), 1)
+            fprintf(['Elapsed Sim Time: ', num2str(data.t(idx)), '\n']);
+        end
+
     end
 
 

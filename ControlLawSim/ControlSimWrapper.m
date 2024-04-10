@@ -31,4 +31,8 @@ figure
 plot(data.t, data.w);
 
 figure
-plot(data.t, data.u);
+hold on
+plot(data.t, data.u, '--');
+set(gca,'colororderindex',1);
+plot(data.t, data.ua)
+

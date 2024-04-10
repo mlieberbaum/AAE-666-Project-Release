@@ -21,7 +21,7 @@ function [rOut, vOut, qOut, wOut, uOut, uActOut, ctrl] = dynprop(r, v, q, w, sim
         uCtl = ctrl.mu * cross(w, Je*w) - D*w - K*qe(1:3);
         uAct = uCtl;
 
-    elseif strcmp(ctrl.type, 'BWDISC')
+    elseif strcmp(ctrl.type, 'BWDISC') || strcmp(ctrl.type, 'BWDISCFULL')
 
         if mod(simFrame, ctrl.nZOH) == 0
 
@@ -54,7 +54,12 @@ function [rOut, vOut, qOut, wOut, uOut, uActOut, ctrl] = dynprop(r, v, q, w, sim
 
         end
 
-        [tOut, xOut] = ode45(@(t,x) bongWieDisc(t,x,SC,uAct), [0 simIn.dt], x0, S);
+        if strcmp(ctrl.type, 'BWDISC')
+            [tOut, xOut] = ode45(@(t,x) bongWieDisc(t,x,SC,uAct), [0 simIn.dt], x0, S);
+        elseif strcmp(ctrl.type, 'BWDISCFULL')
+            [tOut, xOut] = ode45(@(t,x) bongWieDiscFullSim(t,x,SC,uAct), [0 simIn.dt], x0, S);
+        end
+
 
     elseif strcmp(ctrl.type, 'LINEAR')
 
