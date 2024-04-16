@@ -15,7 +15,7 @@ function inputData = BongWieTimeDelay()
 
 
     % Controller parameters (Section IV Case 4)
-    inputData.ctrl.K = diag([60,110,155]);
+    inputData.ctrl.K = diag([110,110,110]);
     inputData.ctrl.D = 0.316 .* diag([1200, 2200, 3100]);
     
     inputData.ctrl.Jest = diag([1200, 2200, 3100]);
@@ -25,7 +25,7 @@ function inputData = BongWieTimeDelay()
     inputData.ctrl.nZOH = 1;
 
     % 0.1 rad +X step rotation
-    inputData.ctrl.qc = [sin(1/2) ; 0 ; 0 ; cos(1/2)];
+    inputData.ctrl.qc = [0 ; sin(1/2) ; 0 ; cos(1/2)];
 
     % Normalize quaternion command
     inputData.ctrl.qc = inputData.ctrl.qc ./ norm(inputData.ctrl.qc);
