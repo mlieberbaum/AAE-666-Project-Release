@@ -146,7 +146,7 @@ for idx = 1:3
     end
 
     xlabel('Time (sec)')
-    ylabel(['\omega', num2str(idx)])
+    ylabel(['\omega', num2str(idx), ' (rad/s)'])
     xlim([0 100])
     xticks(0:50:100);
     ylim(ylimits(idx,:));
