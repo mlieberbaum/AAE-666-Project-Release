@@ -13,12 +13,12 @@ clc
 %     doi: 10.2514/3.20418
 
 
-% Spacecraft Inertia
-J = 1200;
+% Spacecraft Inertia (Y-Axis)
+J = 2200;
 
 
-% Quaternion and Rate gain feedback gains: Case 4 from [1]
-K = 0.05 * J;
+% Quaternion and Rate gain feedback gains: Case 4 from [2]
+K = 110;
 D = 0.316 * J;
 
 
@@ -28,7 +28,7 @@ KpPD = K / 2;
 
 
 % Rate gain is identical
-KdPD = D(1,1);
+KdPD = D;
 
 
 % Compute PD controller open loop and closed loop transfer function
@@ -102,14 +102,14 @@ fprintf(['   Delay Margin = ', num2str(marginPid.DelayMargin, '%6.2f'), ' sec\n\
 % Run the nonlinear controller and add the plot
 inputData = BongWieTimeDelay();
 inputData.ctrl.delay = 0;
-inputData.ctrl.qc = [sin(1/2) ; 0 ; 0 ; cos(1/2)];
+inputData.ctrl.qc = [0; sin(1/2) ; 0 ; cos(1/2)];
 inputData.sim.tf = 100;
 inputData.sim.dt = 0.01;
 data = ControlLawSim(inputData);
 
 figure(fh);
 set(gcf, 'Color', 'w')
-plot(data.t, 2*asin(data.q(:,1)), 'Color', [.929 .694 .125]);
+plot(data.t, 2*asin(data.q(:,2)), 'Color', [.929 .694 .125]);
 plot([0 90], [0.98 0.98], 'r:');
 plot([0 90], [1.02 1.02], 'r:');
 legend('PD', 'PID', 'Nonlinear', '2% Settling Band', 'Location', 'NorthEast')
@@ -117,7 +117,7 @@ xlim([0 70])
 
 xlabel('Time (s)')
 ylabel('radians');
-title(tl, 'Step Response Comparison', 'FontSize', 12, 'FontWeight', 'Bold')
+title(tl, 'Step Response Comparison, Y-Axis Rotation', 'FontSize', 12, 'FontWeight', 'Bold')
 
 ax = axes;
 set(ax, 'units', 'normalized', 'position', [.5 .2 .35 .3]);
@@ -127,7 +127,7 @@ grid minor
 hold on
 plot(t1, y1);
 plot(t2, y2);
-plot(data.t, 2*asin(data.q(:,1)));
+plot(data.t, 2*asin(data.q(:,2)));
 plot([0 90], [0.98 0.98], 'r:');
 plot([0 90], [1.02 1.02], 'r:');
 set(ax, 'xlim', [20 50], 'ylim', [.95 1.05])
