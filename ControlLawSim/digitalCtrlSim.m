@@ -132,7 +132,7 @@ for idx = 1:3
     end
 
     xlabel('Time (sec)')
-    ylabel(['\omega', num2str(idx)])
+    ylabel(['\omega', num2str(idx), ' (rad/s)'])
 
     if idx == 3
         lh = legend('Continuous', '1 Hz ZOH', '0.5 Hz ZOH', '0.33 Hz ZOH', '0.25 Hz ZOH', 'Location', 'Best');
