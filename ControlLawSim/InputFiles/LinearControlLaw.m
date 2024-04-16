@@ -16,13 +16,13 @@ function inputData = LinearControlLaw(type)
 
     % Controller parameters
     if strcmp(type, 'PD')
-        inputData.ctrl.Kp = 30.0;
-        inputData.ctrl.Kd = 379.2;
+        inputData.ctrl.Kp = [55 ; 55 ; 55];
+        inputData.ctrl.Kd = [379.2 ; 695.2 ; 979.6];
         inputData.ctrl.Ki = 0.0;
     elseif strcmp(type, 'PID')
-        inputData.ctrl.Kp = 89.91;
-        inputData.ctrl.Kd = 568.8;
-        inputData.ctrl.Ki = 4.74;
+        inputData.ctrl.Kp = [114.9136 ; 164.8416 ; 293.0259];
+        inputData.ctrl.Kd = [568.8 ; 1042.8 ; 1732.8465];
+        inputData.ctrl.Ki = [8.69 ; 8.69 ; 13.3641];
     else
         error('Invalid control type');
     end

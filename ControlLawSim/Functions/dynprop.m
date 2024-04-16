@@ -70,17 +70,17 @@ function [rOut, vOut, qOut, wOut, uOut, uActOut, ctrl] = dynprop(r, v, q, w, sim
         qErr = -errorQuaternion(ctrl.qc, x0(7:10));
         thErr = qErr(1:3) * 2;
 
-        uP = ctrl.Kp * thErr;
-
         if simFrame == 0
             ctrl.thErrInt = thErr * simIn.dt;
             ctrl.thErrPrev = thErr;
+            uP = zeros(3,1);
             uD = zeros(3,1);
             uI = zeros(3,1);
         else
-            uD = ctrl.Kd * (thErr - ctrl.thErrPrev) / simIn.dt;
+            uP = ctrl.Kp .* thErr;
+            uD = ctrl.Kd .* (thErr - ctrl.thErrPrev) / simIn.dt;
             ctrl.thErrPrev = thErr;
-            uI = ctrl.Ki * ctrl.thErrInt;
+            uI = ctrl.Ki .* ctrl.thErrInt;
             ctrl.thErrInt = ctrl.thErrInt + thErr * simIn.dt;
         end
 

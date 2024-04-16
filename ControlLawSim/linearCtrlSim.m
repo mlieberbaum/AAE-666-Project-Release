@@ -78,18 +78,11 @@ data{1} = ControlLawSim(inputData);
 inputData = LinearControlLaw('PID');
 data{2} = ControlLawSim(inputData);
 
-% Bong Wie control law, state feed back only
-inputData = BongWieDiscrete();
-inputData.ctrl.K = diag([110 110 110]);
-inputData.ctrl.mu = 0.0;
-inputData.ctrl.nZOH = 1;
-data{3} = ControlLawSim(inputData);
-
 % Nonlinear control law
 inputData = BongWieDiscrete();
 inputData.ctrl.K = diag([110 110 110]);
 inputData.ctrl.nZOH = 1;
-data{4} = ControlLawSim(inputData);
+data{3} = ControlLawSim(inputData);
 
 
 
@@ -105,13 +98,13 @@ for idx = 1:4
     hold on
     grid on
 
-    for idx2 = 1:4
+    for idx2 = 1:3
         plot(data{idx2}.t, data{idx2}.q(:,idx));
     end
 
     xlabel('Time (sec)')
     ylabel(['q', num2str(idx)])
-    legend('PD', 'PID', 'State Feedback', 'Nonlinear', 'Location', 'Best')
+    legend('PD', 'PID', 'Nonlinear', 'Location', 'Best')
 
 end
 
@@ -132,13 +125,13 @@ for idx = 1:3
     hold on
     grid on
 
-    for idx2 = 1:4
+    for idx2 = 1:3
         plot(data{idx2}.t, data{idx2}.w(:,idx));
     end
 
     xlabel('Time (sec)')
     ylabel(['\omega', num2str(idx)])
-    legend('PD', 'PID', 'State Feedback', 'Nonlinear', 'Location', 'Best')
+    legend('PD', 'PID', 'Nonlinear', 'Location', 'Best')
 
 end
 
