@@ -98,7 +98,7 @@ for idx = 1:4
     grid on
 
     for idx2 = 1:numel(data)
-        plot(data{idx2}.t, data{idx2}.q(:,idx));
+        plot(data{idx2}.t(1:10:end), data{idx2}.q(1:10:end,idx));
     end
 
     xlabel('Time (sec)')
@@ -110,7 +110,7 @@ for idx = 1:4
 
 end
 
-saveas(gcf, 'LinCtrlSimQ.svg', 'svg')
+saveas(gcf, 'DigitalCtrlSimQ.svg', 'svg')
 
 
 %% BODY RATE PLOT
@@ -128,7 +128,7 @@ for idx = 1:3
     grid on
 
     for idx2 = 1:numel(data)
-        plot(data{idx2}.t, data{idx2}.w(:,idx));
+        plot(data{idx2}.t(1:10:end), data{idx2}.w(1:10:end,idx));
     end
 
     xlabel('Time (sec)')
@@ -141,4 +141,4 @@ for idx = 1:3
 
 end
 
-saveas(gcf, 'LinCtrlSimOmega.svg', 'svg')
+saveas(gcf, 'DigitalCtrlSimOmega.svg', 'svg')

@@ -101,7 +101,7 @@ for idx = 1:4
     grid on
 
     for idx2 = 1:4
-        plot(data{idx2}.t, data{idx2}.q(:,idx), 'k', 'LineStyle', lineStyles{idx2});
+        plot(data{idx2}.t(1:10:end), data{idx2}.q(1:10:end,idx), 'k', 'LineStyle', lineStyles{idx2});
     end
 
     xlabel('Time (sec)')
@@ -142,7 +142,7 @@ for idx = 1:3
     grid on
 
     for idx2 = 1:4
-        plot(data{idx2}.t, data{idx2}.w(:,idx), 'k', 'LineStyle', lineStyles{idx2});
+        plot(data{idx2}.t(1:10:end), data{idx2}.w(1:10:end,idx), 'k', 'LineStyle', lineStyles{idx2});
     end
 
     xlabel('Time (sec)')
@@ -181,7 +181,7 @@ for idx = 1:3
     grid on
 
     for idx2 = 1:4
-        plot(data{idx2}.t, data{idx2}.u(:,idx), 'k', 'LineStyle', lineStyles{idx2});
+        plot(data{idx2}.t(1:10:end), data{idx2}.u(1:10:end,idx), 'k', 'LineStyle', lineStyles{idx2});
     end
 
     xlabel('Time (sec)')
