@@ -20,6 +20,18 @@ inputData = BongWieDiscreteFullSim();
 data = ControlLawSim(inputData);
 
 
+%% COMPUTE QUATERNION CONTROL ERROR
+qerr = nan(size(data.q));
+
+for i = 1:numel(data.t)
+    qe = errorQuaternion(inputData.ctrl.qc, data.q(i,:)');
+    qerr(i,:) = qe.';
+end
+
+% Convert from radians to arcseconds
+thErr = 2 .* asin(qerr(:,1:3)) * 180/pi * 3600;
+
+
 
 %% ORBIT ANALYSIS PLOTS
 figure;
@@ -31,11 +43,12 @@ Torbit = 7741.8395;
 nexttile;
 hold on
 grid on
-plot(data.t ./ Torbit, (inputData.ctrl.qc(1:3).' - data.q(:,1:3)) * 180/pi * 3600);
+plot(data.t ./ Torbit, thErr);
 xlabel('Orbit Number')
 ylabel('arc seconds')
 title('Pointing Error vs. Orbit Number')
 xlim([0 5])
+ylim([-10 10])
 legend('x', 'y', 'z', 'Location', 'Best')
 
 nexttile;
